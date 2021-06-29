@@ -52,4 +52,6 @@ jobs:
           description: 'Cypress tests passed'
           # success, error, failure, or pending
           state: 'success'
-          sha: ${{github.event.pull_request.head.sha}}
+          owner: 'bahmutov'
+          repository: 'todomvc-no-tests'
+          sha: ${{github.event.inputs.commit}}
