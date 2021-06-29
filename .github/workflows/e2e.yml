@@ -47,7 +47,10 @@ jobs:
         if: ${{ github.event.inputs.commit }}
         uses: Sibz/github-status-action@v1
         with:
-          authToken: ${{secrets.GITHUB_TOKEN}}
+          # create personal GitHub token to be able to
+          # set status in other repositories
+          # https://github.com/settings/tokens/new
+          authToken: ${{secrets.PERSONAL_GITHUB_TOKEN}}
           context: 'E2E tests'
           description: 'Cypress tests passed'
           # success, error, failure, or pending
