@@ -43,8 +43,8 @@ jobs:
 
       # after e2e tests finish, set the status back in the original repo
       # https://github.com/marketplace/actions/github-status-action
-      - name: set PR status
-        if: ${{ github.event.inputs.commit }}
+      - name: Always set commit status
+        if: ${{ always() && github.event.inputs.commit }}
         uses: Sibz/github-status-action@v1
         with:
           # create personal GitHub token to be able to
