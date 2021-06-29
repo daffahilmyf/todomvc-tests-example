@@ -36,6 +36,9 @@ jobs:
         # let's give this action an ID so we can refer
         # to its output values later
         id: cypress
+        # Continue the build in case of an error, as we need to set the
+        # commit status in the next step, both in case of success and failure
+        continue-on-error: true
         with:
           # we want to test the URL passed by Netlify
           config: baseUrl=${{ github.event.inputs.deployPrimeUrl }}
@@ -46,8 +49,8 @@ jobs:
 
       # after e2e tests finish, set the status back in the original repo
       # https://github.com/marketplace/actions/github-status-action
-      - name: Always set commit status
-        if: ${{ always() && github.event.inputs.commit }}
+      - name: Set commit status
+        if: ${{ github.event.inputs.commit }}
         uses: Sibz/github-status-action@v1
         with:
           # create personal GitHub token to be able to
@@ -56,8 +59,10 @@ jobs:
           authToken: ${{secrets.PERSONAL_GITHUB_TOKEN}}
           context: 'E2E tests'
           description: 'Cypress tests passed'
-          # success, error, failure, or pending
-          state: 'success'
+          # state can be success, error, failure, or pending
+          # let's grab it from the Cypress step outcomes
+          # https://github.com/cypress-io/github-action#outputs
+          state: ${{ steps.cypress.outcome }}
           owner: 'bahmutov'
           repository: 'todomvc-no-tests'
           sha: ${{github.event.inputs.commit}}
