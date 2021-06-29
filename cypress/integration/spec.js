@@ -3,7 +3,7 @@
 it('works', () => {
   cy.visit('/')
   // application starts with 3 todos
-  cy.get('.todo').should('have.length', 30) // make fail on purpose
+  cy.get('.todo').should('have.length', 3)
   cy.get('[data-cy=new-todo]').type('Add tests!{enter}')
   cy.get('.todo')
     .should('have.length', 4)
