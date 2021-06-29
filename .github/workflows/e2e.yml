@@ -33,6 +33,9 @@ jobs:
       # Installs and caches dependencies, runs all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        # let's give this action an ID so we can refer
+        # to its output values later
+        id: cypress
         with:
           # we want to test the URL passed by Netlify
           config: baseUrl=${{ github.event.inputs.deployPrimeUrl }}
@@ -58,3 +61,4 @@ jobs:
           owner: 'bahmutov'
           repository: 'todomvc-no-tests'
           sha: ${{github.event.inputs.commit}}
+          target_url: ${{ steps.cypress.outputs.dashboardUrl }}
