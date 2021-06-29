@@ -11,6 +11,9 @@ on:
         description: Deployed URL
         required: true
         default: 'https://todomvc-no-tests.netlify.app/'
+      commit:
+        description: Original repo commit SHA
+        required: false
 jobs:
   # example job showing the Netlify information
   show-event:
@@ -24,6 +27,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       # https://github.com/cypress-io/github-action
       # Installs and caches dependencies, runs all Cypress tests
       - name: Cypress run
@@ -35,3 +39,16 @@ jobs:
           record: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+      # after e2e tests finish, set the status back in the original repo
+      # https://github.com/marketplace/actions/github-status-action
+      - name: set PR status
+        if: ${{ github.event.inputs.commit }}
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{secrets.GITHUB_TOKEN}}
+          context: 'E2E tests'
+          description: 'Cypress tests passed'
+          # success, error, failure, or pending
+          state: 'success'
+          sha: ${{github.event.pull_request.head.sha}}
