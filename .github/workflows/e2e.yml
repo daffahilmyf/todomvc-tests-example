@@ -10,7 +10,7 @@ on:
       deployPrimeUrl:
         description: Deployed URL
         required: true
-        default: 'https://todomvc-no-tests.netlify.app/'
+        default: 'https://willowy-mousse-c41592.netlify.app/'
       commit:
         description: Original repo commit SHA
         required: false
@@ -43,9 +43,9 @@ jobs:
           # we want to test the URL passed by Netlify
           config: baseUrl=${{ github.event.inputs.deployPrimeUrl }}
           # store video and screenshots on Cypress Dashboard
-          record: true
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          record: false
+        # env:
+        #   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
       # after e2e tests finish, set the status back in the original repo
       # https://github.com/marketplace/actions/github-status-action
@@ -63,7 +63,7 @@ jobs:
           # let's grab it from the Cypress step outcomes
           # https://github.com/cypress-io/github-action#outputs
           state: ${{ steps.cypress.outcome }}
-          owner: 'bahmutov'
-          repository: 'todomvc-no-tests'
+          owner: 'daffahilmyf'
+          repository: 'todomvc-no-tests-example'
           sha: ${{github.event.inputs.commit}}
           target_url: ${{ steps.cypress.outputs.dashboardUrl }}
